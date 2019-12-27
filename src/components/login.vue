@@ -2,7 +2,7 @@
   <div class="container">
     <div class="login-box">
       <div class="logo">
-        <img src="../assets/logo.jpg" alt />
+        <img src="../assets/logo.jpg"/>
       </div>
       <el-form class="loginInfo" :model="loginForm">
         <el-form-item>
