@@ -2,13 +2,13 @@
   <div class="container">
     <div class="login-box">
       <div class="logo">
-        <img src="../assets/logo.jpg"/>
+        <img src="../assets/logo.jpg" />
       </div>
-      <el-form class="loginInfo" :model="loginForm">
-        <el-form-item>
+      <el-form class="loginInfo" :model="loginForm" :rules="rules" ref="ruleForm">
+        <el-form-item prop="username">
           <el-input prefix-icon="iconfont icon-user" v-model="loginForm.username"></el-input>
         </el-form-item>
-        <el-form-item>
+        <el-form-item prop="password">
           <el-input
             prefix-icon="iconfont icon-3702mima"
             v-model="loginForm.password"
@@ -16,8 +16,8 @@
           ></el-input>
         </el-form-item>
         <el-form-item class="loginBtn">
-          <el-button type="primary">登录</el-button>
-          <el-button type="info">重置</el-button>
+          <el-button type="primary" @click="submitForm">登录</el-button>
+          <el-button type="info" @click="resetForm">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -25,13 +25,37 @@
 </template>
 
 <script>
+import { async } from 'q'
 export default {
   data() {
     return {
       loginForm: {
         username: '',
         password: ''
+      },
+      rules: {
+        username: [{ required: true, message: '请输入用户名' }],
+        password: [
+          { required: true, message: '请输入密码' },
+          { min: 6, max: 15, message: '长度在 6 到 15 个字符' }
+        ]
       }
+    }
+  },
+  methods: {
+    submitForm() {
+      this.$refs.ruleForm.validate(async valid => {
+        if (!valid) return
+        const { data: res } = await this.$http.post('login', this.loginForm)
+        if (res.meta.status == 200) {
+          console.log('登录成功')
+        } else {
+          console.log('登录失败')
+        }
+      })
+    },
+    resetForm() {
+      this.$refs.ruleForm.resetFields()
     }
   }
 }
