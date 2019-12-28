@@ -30,8 +30,8 @@ export default {
   data() {
     return {
       loginForm: {
-        username: '',
-        password: ''
+        username: 'admin',
+        password: '123456'
       },
       rules: {
         username: [{ required: true, message: '请输入用户名' }],
@@ -46,11 +46,13 @@ export default {
     submitForm() {
       this.$refs.ruleForm.validate(async valid => {
         if (!valid) return
-        const { data: res } = await this.$http.post('login', this.loginForm)
+        const {data:res} = await this.$http.post('login', this.loginForm)
         if (res.meta.status == 200) {
-          console.log('登录成功')
+          this.$message.success('登录成功')
+          window.sessionStorage.setItem('token',res.data.token)
+          this.$router.push('/home')
         } else {
-          console.log('登录失败')
+          this.$message.error('登录失败')
         }
       })
     },
@@ -64,8 +66,11 @@ export default {
 <style lang="scss" scoped>
 .container {
   height: 100%;
-  background-color: #2b4b6b;
+  // background-color: #2b4b6b;
   position: relative;
+  background: url('../assets/bg.jpg') no-repeat;
+  background-size: cover;
+  background-position: center;
   .login-box {
     width: 500px;
     height: 350px;
