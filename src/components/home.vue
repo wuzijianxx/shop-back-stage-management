@@ -9,29 +9,16 @@
     </el-header>
     <el-container class="main-box">
       <el-aside width="200px">
-        <el-menu
-          default-active="2"
-          class="el-menu-vertical-demo"
-          @open="handleOpen"
-          @close="handleClose"
-        >
-          <el-submenu index="1">
+        <el-menu default-active="2" class="el-menu-vertical-demo">
+          <el-submenu :index="item.order+''" v-for="(item,index) in menulist" :key="index">
             <template slot="title">
-              <i class="el-icon-location"></i>
-              <span>导航一</span>
+              <i :class="icons[item.id]"></i>
+              <span>{{item.authName}}</span>
             </template>
-            <el-menu-item-group>
-              <template slot="title">分组一</template>
-              <el-menu-item index="1-1">选项1</el-menu-item>
-              <el-menu-item index="1-2">选项2</el-menu-item>
-            </el-menu-item-group>
-            <el-menu-item-group title="分组2">
-              <el-menu-item index="1-3">选项3</el-menu-item>
-            </el-menu-item-group>
-            <el-submenu index="1-4">
-              <template slot="title">选项4</template>
-              <el-menu-item index="1-4-1">选项1</el-menu-item>
-            </el-submenu>
+            <el-menu-item :index="item.id+''" v-for="(item,index) in item.children" :key="index">
+              <i class="el-icon-menu"></i>
+              {{item.authName}}
+            </el-menu-item>
           </el-submenu>
         </el-menu>
       </el-aside>
@@ -44,19 +31,32 @@
 export default {
   data() {
     return {
-      isCollapse: true
+      menulist: [],
+      icons: {
+        125: 'iconfont icon-user',
+        103: 'iconfont icon-tijikongjian',
+        101: 'iconfont icon-shangpin',
+        102: 'iconfont icon-danju',
+        145: 'iconfont icon-baobiao'
+      }
     }
+  },
+  created() {
+    this.getMenuList()
   },
   methods: {
     out() {
       window.sessionStorage.clear()
       this.$router.push('/login')
     },
-    handleOpen(key, keyPath) {
-      console.log(key, keyPath)
-    },
-    handleClose(key, keyPath) {
-      console.log(key, keyPath)
+    async getMenuList() {
+      const { data: res } = await this.$http.get('menus')
+      console.log(res)
+      if (res.meta.status == 200) {
+        this.menulist = res.data
+      } else {
+        return this.$message.error(res.meta.msg)
+      }
     }
   }
 }
@@ -87,6 +87,9 @@ export default {
   .main-box {
     aside {
       background-color: #97baec;
+      .iconfont {
+        margin-right: 10px;
+      }
     }
   }
 }

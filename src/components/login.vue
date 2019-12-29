@@ -25,7 +25,6 @@
 </template>
 
 <script>
-import { async } from 'q'
 export default {
   data() {
     return {
@@ -46,10 +45,10 @@ export default {
     submitForm() {
       this.$refs.ruleForm.validate(async valid => {
         if (!valid) return
-        const {data:res} = await this.$http.post('login', this.loginForm)
+        const { data: res } = await this.$http.post('login', this.loginForm)
         if (res.meta.status == 200) {
           this.$message.success('登录成功')
-          window.sessionStorage.setItem('token',res.data.token)
+          window.sessionStorage.setItem('token', res.data.token)
           this.$router.push('/home')
         } else {
           this.$message.error('登录失败')
