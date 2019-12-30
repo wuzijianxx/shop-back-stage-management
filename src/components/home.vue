@@ -8,21 +8,35 @@
       <el-button @click="out" round>退出</el-button>
     </el-header>
     <el-container class="main-box">
-      <el-aside width="200px">
-        <el-menu default-active="2" class="el-menu-vertical-demo">
-          <el-submenu :index="item.order+''" v-for="(item,index) in menulist" :key="index">
+      <el-aside :width="isCollapse?'64px':'200px'">
+        <div class="toggel" @click="toggelCollapse">|||</div>
+        <el-menu
+          default-active="2"
+          class="el-menu-vertical-demo"
+          :collapse="isCollapse"
+          router
+          :default-active="activePath"
+        >
+          <el-submenu :index="item.id+''" v-for="(item,index) in menulist" :key="index">
             <template slot="title">
               <i :class="icons[item.id]"></i>
               <span>{{item.authName}}</span>
             </template>
-            <el-menu-item :index="item.id+''" v-for="(item,index) in item.children" :key="index">
+            <el-menu-item
+              :index="'/'+item.path"
+              @click="saveNavState('/'+item.path)"
+              v-for="(item,index) in item.children"
+              :key="index"
+            >
               <i class="el-icon-menu"></i>
               {{item.authName}}
             </el-menu-item>
           </el-submenu>
         </el-menu>
       </el-aside>
-      <el-main>Main</el-main>
+      <el-main>
+        <router-view></router-view>
+      </el-main>
     </el-container>
   </el-container>
 </template>
@@ -38,11 +52,14 @@ export default {
         101: 'iconfont icon-shangpin',
         102: 'iconfont icon-danju',
         145: 'iconfont icon-baobiao'
-      }
+      },
+      isCollapse: false,
+      activePath: ''
     }
   },
   created() {
     this.getMenuList()
+    this.activePath = window.sessionStorage.getItem('activePath')
   },
   methods: {
     out() {
@@ -57,6 +74,13 @@ export default {
       } else {
         return this.$message.error(res.meta.msg)
       }
+    },
+    toggelCollapse() {
+      this.isCollapse = !this.isCollapse
+    },
+    saveNavState(activePath) {
+      window.sessionStorage.setItem('activePath', activePath)
+      this.activePath = activePath
     }
   }
 }
@@ -89,6 +113,15 @@ export default {
       background-color: #97baec;
       .iconfont {
         margin-right: 10px;
+      }
+      .toggel {
+        height: 30px;
+        background-color: #005dfd;
+        color: white;
+        text-align: center;
+        line-height: 30px;
+        letter-spacing: 3px;
+        cursor: pointer;
       }
     }
   }
