@@ -8,7 +8,7 @@
       <el-button @click="out" round>退出</el-button>
     </el-header>
     <el-container class="main-box">
-      <el-aside :width="isCollapse?'64px':'200px'">
+      <el-aside :width="isCollapse?'65px':'200px'">
         <div class="toggel" @click="toggelCollapse">|||</div>
         <el-menu
           default-active="2"
@@ -68,7 +68,6 @@ export default {
     },
     async getMenuList() {
       const { data: res } = await this.$http.get('menus')
-      console.log(res)
       if (res.meta.status == 200) {
         this.menulist = res.data
       } else {
@@ -125,5 +124,8 @@ export default {
       }
     }
   }
+}
+/deep/ .el-menu--collapse{
+  width: 64px;
 }
 </style>
