@@ -62,10 +62,12 @@ export default {
     this.activePath = window.sessionStorage.getItem('activePath')
   },
   methods: {
+    //退出主页 清除token
     out() {
       window.sessionStorage.clear()
       this.$router.push('/login')
     },
+    //获取用户列表信息
     async getMenuList() {
       const { data: res } = await this.$http.get('menus')
       if (res.meta.status == 200) {
@@ -77,6 +79,7 @@ export default {
     toggelCollapse() {
       this.isCollapse = !this.isCollapse
     },
+    //用户列表路径
     saveNavState(activePath) {
       window.sessionStorage.setItem('activePath', activePath)
       this.activePath = activePath

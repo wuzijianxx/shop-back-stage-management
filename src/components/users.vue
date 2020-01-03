@@ -50,7 +50,7 @@
       </el-table>
       <el-pagination
         :current-page="queryInfo.pagenum"
-        :page-sizes="[1,2, 4, 6, 8]"
+        :page-sizes="[1,2, 4, 6, 100]"
         :page-size="queryInfo.pagesize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
@@ -59,11 +59,30 @@
       ></el-pagination>
     </el-card>
 
-    <el-dialog title="添加用户" :visible.sync="dialogVisible" width="30%">
-      <span>这是一段信息</span>
+    <el-dialog title="添加用户" @close="addDialogClosed" :closeOnClickModal="false" :visible.sync="dialogVisible" width="30%">
+      <el-form
+        label-width="70px"
+        :model="addruleForm"
+        :rules="addrules"
+        ref="addruleFormRef"
+        class="demo-ruleForm"
+      >
+        <el-form-item label="用户名" prop="username">
+          <el-input v-model="addruleForm.username"></el-input>
+        </el-form-item>
+        <el-form-item label="密码" prop="password">
+          <el-input v-model="addruleForm.password"></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱" prop="email">
+          <el-input v-model="addruleForm.email"></el-input>
+        </el-form-item>
+        <el-form-item label="手机" prop="mobile">
+          <el-input v-model="addruleForm.mobile"></el-input>
+        </el-form-item>
+      </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+        <el-button type="primary" @click="addSubmitForm">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -72,17 +91,57 @@
 <script>
 export default {
   data() {
+      //验证邮箱的规则
+  var checkEmail = (rule, value, cb) => {
+    const regEmail = /^\w+@\w+(\.\w+)+$/
+    if (regEmail.test(value)) {
+      return cb()
+    }
+    //返回一个错误提示
+    cb(new Error('请输入合法的邮箱'))
+  }
+  //验证手机号码的规则
+  var checkMobile = (rule, value, cb) => {
+    const regMobile = /^1[34578]\d{9}$/
+    if (regMobile.test(value)) {
+      return cb()
+    }
+    //返回一个错误提示
+    cb(new Error('请输入合法的手机号码'))
+  }
     return {
-      queryInfo: { query: '', pagenum: 1, pagesize: 2 },
+      queryInfo: { query: '', pagenum: 1, pagesize: 100 },
       userList: [],
       total: 1,
-      dialogVisible:false
+      dialogVisible: false,
+      addruleForm: {
+        username: '',
+        password: '',
+        email: '',
+        mobile: ''
+      },
+      addrules: {
+        username: [{ required: true, message: '请输入用户名' }],
+        password: [
+          { required: true, message: '请输入密码' },
+          { min: 6, max: 15, message: '长度在 6 到 15 个字符' }
+        ],
+        email: [
+          { required: true, message: '请输入邮箱地址' },
+          { validator: checkEmail}
+        ],
+        mobile: [
+          { required: true, message: '请输入手机号码' },
+          { validator: checkMobile}
+        ]
+      }
     }
   },
   created() {
     this.getUserList()
   },
   methods: {
+    //获取用户
     async getUserList() {
       const { data: res } = await this.$http.get('users', {
         params: this.queryInfo
@@ -94,14 +153,17 @@ export default {
         return this.$message.error('获取用户列表失败')
       }
     },
+    //当前页数
     handleSizeChange(val) {
       this.queryInfo.pagesize = val
       this.getUserList()
     },
+    //总页数
     handleCurrentChange(val) {
       this.queryInfo.pagenum = val
       this.getUserList()
     },
+    //监听 switch 状态
     async userStateChanged(userinfo) {
       const { data: res } = await this.$http.put(
         `users/${userinfo.id}/state/${userinfo.mg_state}`
@@ -112,6 +174,24 @@ export default {
         userinfo.mg_state = !userinfo.mg_state
         return this.$message.error('更新用户列表失败')
       }
+    },
+    //提交验证添加用户表单
+    addSubmitForm() {
+      this.$refs.addruleFormRef.validate(async valid => {
+        if (!valid) return
+        const { data: res } = await this.$http.post('users', this.addruleForm)
+        if (res.meta.status == 201) {
+          this.$message.success('添加成功')
+          this.dialogVisible = false
+          this.getUserList()
+        } else {
+          this.$message.error('添加失败')
+        }
+      })
+    },
+    //添加用户关闭重置表单
+    addDialogClosed(){
+      this.$refs.addruleFormRef.resetFields()
     }
   }
 }
