@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>roles组件</h1>
+        <h1>角色列表组件</h1>
     </div>
 </template>
 
