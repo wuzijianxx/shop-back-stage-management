@@ -18,9 +18,6 @@ axios.interceptors.request.use(config=>{
   return config
 })
 Vue.prototype.$http=axios
-
-
-
 Vue.config.productionTip = false
 
 new Vue({
