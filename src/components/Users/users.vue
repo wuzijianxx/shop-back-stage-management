@@ -233,6 +233,8 @@ export default {
       if (res.meta.status == 200) {
         this.userList = res.data.users
         this.total = res.data.total
+        console.log(this.queryInfo)
+        console.log(this.userList)
       } else {
         return this.$message.error('获取用户列表失败')
       }
