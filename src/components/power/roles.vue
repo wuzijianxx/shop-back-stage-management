@@ -324,13 +324,6 @@ export default {
 
 <style lang="scss" scoped>
 .container {
-  .el-breadcrumb {
-    margin-bottom: 20px;
-  }
-  .el-table,
-  .el-pagination {
-    margin-top: 20px;
-  }
   .el-tag {
     margin: 10px;
   }

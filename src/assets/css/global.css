@@ -15,7 +15,17 @@ body,
 .minwidthTag {
     min-width: 120px;
 }
+
 .el-cascader-panel {
     height: 300px;
     overflow: hidden;
+}
+
+.container .el-breadcrumb {
+    margin-bottom: 20px;
+}
+
+.container .el-table,
+.container .el-pagination {
+    margin-top: 20px;
 }

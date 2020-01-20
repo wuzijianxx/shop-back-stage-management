@@ -30,7 +30,7 @@
           <el-tag type="success" v-else-if="scope.row.cat_level===1">二级</el-tag>
           <el-tag type="warning" v-else>三级</el-tag>
         </template>
-        <template slot="opt" slot-scope="scope">
+        <template slot="opt" slot-scope="scope"> 
           <el-button type="primary" icon="el-icon-edit" @click="showCateDialog(scope.row.cat_id)">编辑</el-button>
           <el-button type="danger" icon="el-icon-delete" @click="removeCateById(scope.row.cat_id)">删除</el-button>
         </template>
@@ -146,6 +146,7 @@ export default {
       if (res.meta.status == 200) {
         this.catelist = res.data.result
         this.total = res.data.total
+        console.log(res.data,res.data.result)
       } else {
         this.$message.error('获取商品分类失败')
       }
@@ -275,13 +276,6 @@ export default {
 
 <style lang="scss" scoped>
 .container {
-  .el-breadcrumb {
-    margin-bottom: 20px;
-  }
-  .el-table,
-  .el-pagination {
-    margin-top: 20px;
-  }
   .el-tag {
     margin: 10px;
   }

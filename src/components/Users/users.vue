@@ -371,13 +371,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.container {
-  .el-breadcrumb {
-    margin-bottom: 20px;
-  }
-  .el-table,
-  .el-pagination {
-    margin-top: 20px;
-  }
-}
+
 </style>
