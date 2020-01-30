@@ -223,7 +223,6 @@ export default {
         } else {
           this.onlyTableData = res.data
         }
-        console.log(res.data)
       } else {
         this.$message.error('获取参数列表失败')
       }
