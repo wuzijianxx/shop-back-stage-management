@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+
 const Login = () => import(/* webpackChunkName:"login_home_welcome" */ '../components/login.vue')
 // import Login from './components/login.vue'
 const Home = () => import(/* webpackChunkName:"login_home_welcome" */ '../components/home.vue')
@@ -28,75 +29,75 @@ const Report = () => import(/* webpackChunkName:"report" */ '../components/repor
 Vue.use(VueRouter)
 
 const router = new VueRouter({
-  routes: [{
-    path: '/',
-    redirect: '/login'
-  },
-  {
-    path: '/login',
-    component: Login
-  },
-  {
-    path: '/home',
-    component: Home,
-    redirect: '/welcome',
-    children: [{
-      path: '/welcome',
-      component: Welcome
-    }, 
-    {
-      path: '/users',
-      component: Users
-    }, 
-    {
-      path: '/roles',
-      component: Roles
-    }, 
-    {
-      path: '/rights',
-      component: Rights
-    }, 
-    {
-      path: '/categories',
-      component: Cate
-    }, 
-    {
-      path: '/params',
-      component: Params
-    }, 
-    {
-      path: '/goods',
-      component: List
-    }, 
-    {
-      path: '/goods/add',
-      component: Add
-    }, 
-    {
-      path: '/orders',
-      component: Order
-    }, 
-    {
-      path: '/reports',
-      component: Report
-    }
-  ]
-  }
-  ]
+    routes: [{
+        path: '/',
+        redirect: '/login'
+    },
+        {
+            path: '/login',
+            component: Login
+        },
+        {
+            path: '/home',
+            component: Home,
+            redirect: '/welcome',
+            children: [{
+                path: '/welcome',
+                component: Welcome
+            },
+                {
+                    path: '/users',
+                    component: Users
+                },
+                {
+                    path: '/roles',
+                    component: Roles
+                },
+                {
+                    path: '/rights',
+                    component: Rights
+                },
+                {
+                    path: '/categories',
+                    component: Cate
+                },
+                {
+                    path: '/params',
+                    component: Params
+                },
+                {
+                    path: '/goods',
+                    component: List
+                },
+                {
+                    path: '/goods/add',
+                    component: Add
+                },
+                {
+                    path: '/orders',
+                    component: Order
+                },
+                {
+                    path: '/reports',
+                    component: Report
+                }
+            ]
+        }
+    ]
 })
 
 //挂载路由导航守卫
-router.beforeEach((to, from, next) => {
-  if (to.path === '/login') {
-    return next()
-  } else {
-    const tokenStr = window.sessionStorage.getItem('token')
-    if (!tokenStr) {
-      return next('/login')
-    }
-  }
-  next()
-})
+// router.beforeEach((to, from, next) => {
+//     if (to.path === '/login') {
+//         return next()
+//     } else {
+//         const tokenStr = window.sessionStorage.getItem('token')
+//         if (!tokenStr) {
+//             return next('/login')
+//         }
+//     }
+//     next()
+// })
 
 
 export default router
